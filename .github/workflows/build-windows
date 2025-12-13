@@ -1,0 +1,34 @@
+name: Build App
+on:
+  workflow_dispatch:
+
+jobs:
+  build-mac:
+    # Your existing macOS job goes here...
+    # ... (no changes needed to the mac job)
+
+  build-windows: # <--- Start of the new Windows job
+    runs-on: windows-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Java
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '17'
+
+      - name: Build Windows Installer (MSI)
+        run: |
+          jpackage `
+            --type msi `
+            --input . `
+            --main-jar Christmas.jar ` # <-- Use YOUR JAR name here
+            --name ChristmasAppWin
+
+      - name: Upload MSI
+        uses: actions/upload-artifact@v4
+        with:
+          name: Windows-App
+          path: "*.msi"
