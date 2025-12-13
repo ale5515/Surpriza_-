@@ -1,11 +1,9 @@
 name: Build Cross-Platform App
 on:
-
   workflow_dispatch:
 
 jobs:
   build-mac:
-
     runs-on: macos-latest
 
     steps:
@@ -18,13 +16,13 @@ jobs:
           java-version: '17'
 
       - name: Build macOS dmg
-       
         run: |
           jpackage \
             --type dmg \
             --input . \
             --main-jar Christmas.jar \
             --main-class Christmas.ChristmasApp \
+            --add-modules ALL-MODULE-PATH \  
             --name ChristmasApp
 
       - name: Upload dmg
@@ -34,7 +32,6 @@ jobs:
           path: "*.dmg"
 
   build-windows:
-    
     runs-on: windows-latest
 
     steps:
@@ -47,13 +44,13 @@ jobs:
           java-version: '17'
 
       - name: Build Windows Installer (MSI)
-        
         run: |
           jpackage `
             --type msi `
             --input . `
             --main-jar Christmas.jar `
             --main-class Christmas.ChristmasApp `
+            --add-modules ALL-MODULE-PATH ` 
             --name ChristmasAppWin
 
       - name: Upload MSI
