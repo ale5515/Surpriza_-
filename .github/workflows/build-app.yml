@@ -1,5 +1,6 @@
 name: Build Cross-Platform App
 on:
+  # Permite declanșarea manuală din Actions
   workflow_dispatch:
 
 jobs:
@@ -16,7 +17,7 @@ jobs:
           java-version: '17'
 
       - name: Build macOS dmg
-        # Toate argumentele jpackage pe o singură linie pentru a evita eroarea "Invalid Option"
+        # Comanda jpackage pe o singură linie pentru a preveni erorile de shell (Invalid Option)
         run: jpackage --type dmg --input . --main-jar Christmas.jar --main-class Christmas.ChristmasApp --add-modules ALL-MODULE-PATH --name ChristmasApp
 
       - name: Upload dmg
@@ -38,28 +39,7 @@ jobs:
           java-version: '17'
 
       - name: Build Windows Installer (MSI)
-        # Toate argumentele jpackage pe o singură linie pentru a evita eroarea "ParserError"
-        run: jpackage --type msi --input . --main-jar Christmas.jar --main-class Christmas.ChristmasApp --add-modules ALL-MODULE-PATH --name ChristmasAppWin
-
-      - name: Upload MSI
-        uses: actions/upload-artifact@v4
-        with:
-          name: Windows-App
-          path: "*.msi"
-
-  build-windows:
-    runs-on: windows-latest
-    steps:
-      - uses: actions/checkout@v4
-
-      - name: Set up Java
-        uses: actions/setup-java@v4
-        with:
-          distribution: temurin
-          java-version: '17'
-
-      - name: Build Windows Installer (MSI)
-        # Am pus toată comanda pe o singură linie pentru a evita eroarea ParserError!
+        # Comanda jpackage pe o singură linie pentru a preveni erorile PowerShell (ParserError)
         run: jpackage --type msi --input . --main-jar Christmas.jar --main-class Christmas.ChristmasApp --add-modules ALL-MODULE-PATH --name ChristmasAppWin
 
       - name: Upload MSI
